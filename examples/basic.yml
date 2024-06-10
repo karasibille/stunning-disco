@@ -1,0 +1,32 @@
+tables:
+  users:
+    query:
+      order_by: id
+      per_page: 3
+    rules:
+      id:
+        strategy: faker
+        unique: true
+        transformer: numberBetween
+        arguments: [ 100, 200 ]
+      name:
+        strategy: faker
+        unique: false
+        locale: en_US
+        transformer: firstName
+      email:
+        strategy: faker
+        unique: true
+        transformer: safeEmail
+      password:
+        strategy: constant
+        value: '$2y$12$a72x2zzn9aZzhBrPmUB3FORx8vT808Vmxzuc6PFU1dWLmz'
+      ine:
+        strategy: faker
+        unique: true
+        transformer: ine
+      date_of_birth:
+        strategy: faker
+        transformer: dateTimeBetween
+        arguments: [ '-28 years', '-18 years' ]
+
