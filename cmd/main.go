@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"os"
 
 	stunningdisco "github.com/karasibille/stunning-disco"
+	"github.com/karasibille/stunning-disco/dumper"
 )
 
 func main() {
@@ -12,11 +13,8 @@ func main() {
 	}
 
 	config := loader.MustLoad()
+	// TODO Configure writer so that we can dump the result in a file.
+	dumper := dumper.Dumper{Config: config, Writer: os.Stdout}
 
-	for tableName, config := range config.Tables {
-		fmt.Printf("--- table: %s\n", tableName)
-		for colName, rule := range config.Rules {
-			fmt.Printf("--- --- col: %s, strat: %v\n", colName, rule.Transformer)
-		}
-	}
+	dumper.Dump()
 }
