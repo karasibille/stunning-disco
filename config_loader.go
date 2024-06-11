@@ -1,13 +1,15 @@
 package stunningdisco
 
 import (
-	"os"
+	"io"
 
 	"github.com/karasibille/stunning-disco/dumper"
 )
 
+// ConfigLoader is a [DumperConfig] Factory.
 type ConfigLoader struct {
-	ConfigPath string
+	// Use the provided [io.Reader] to read yaml configuration.
+	Reader io.Reader
 	// todo
 	// todo {--D|db-driver=mysql : Database driver to use}
 	// todo {--H|db-host=localhost : Database host to connect to}
@@ -20,8 +22,9 @@ type ConfigLoader struct {
 	// todo {config : Use the provided YAML config file}
 }
 
+// Load creates a new DumperConfig by reading the content of [ConfigLoader.Reader]
 func (cl *ConfigLoader) Load() (*dumper.DumperConfig, error) {
-	content, err := os.ReadFile(cl.ConfigPath)
+	content, err := io.ReadAll(cl.Reader)
 	if err != nil {
 		return nil, err
 	}
@@ -29,6 +32,8 @@ func (cl *ConfigLoader) Load() (*dumper.DumperConfig, error) {
 	return dumper.NewDumperConfig(content)
 }
 
+// MustLoad creates a new DumperConfig by reading the content of
+// [ConfigLoader.Reader] and panics if the something goes wrong.
 func (cl *ConfigLoader) MustLoad() *dumper.DumperConfig {
 	cfg, err := cl.Load()
 
